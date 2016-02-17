@@ -58,19 +58,54 @@ class student{
 			f1.close();
 		}
 
-	int unpack();
+	public:int * unpack()
+	{
+		int i=0;
+		int *p = new int[4];
+		while(buffer[i]!='|')
+		{
+			usn=buffer[i];
+			i++;
+			p[0]=f1.tellp();
+		}
+		while(buffer[i]!='|')
+		{
+			name=buffer[i];
+			i++;
+			p[1]=f1.tellp();
+		}
+		while(buffer[i]!='|')
+		{
+			sem=buffer[i];
+			i++;
+			p[2]=f1.tellp();
+		}
+		while(buffer[i]!='$')
+		{
+			branch=buffer[i];
+			i++;
+			p[3]=f1.tellp();
+		}
+		return p;
+	}
+
+
+
+
 	void modify();
 	void del();
 
 	int search(string key)
 	{
-		int p[4];
+		int *p;
+		string sem1;
 		int flag=0,pos;
+		char buffer[101];
 		f1.open("file.txt",ios::in);
 		while(!f1.eof())
 		{
-		  f1.getline(buffer,100);
-		  pos=file.tellp();
+		  f1.read(buffer,100);
+		  pos=f1.tellp();
 		  p=unpack();
 		  if(key==usn)
 		  {
@@ -82,7 +117,10 @@ class student{
 			  flag=1;
 			  return p[1];
 		  }
-		  if(key==sem)//convert sem to string
+		  stringstream out;
+		  out<<sem;
+		  sem1=out.str();
+		  if(key==sem1) //convert sem to string
 		  {
 			  flag=1;
 			  return p[2];
@@ -97,41 +135,11 @@ class student{
 		return pos;
 	}
 
-	int unpack()
-	{
-		int i=0,p[4];
-		while(buffer[i]!='|')
-		{
-			usn=buffer[i];
-			i++;
-			p[0]=file.tellp();
-		}
-		while(buffer[i]!='|')
-		{
-			name=buffer[i];
-			i++;
-			p[1]=file.tellp();
-		}
-		while(buffer[i]!='|')
-		{
-			sem=buffer[i];
-			i++;
-			p[2]=file.tellp();
-		}
-		while(buffer[i]!='$')
-		{
-			branch=buffer[i];
-			i++;
-			p[3]=file.tellp();
-		}
-		return p;
-	}
-
 };
 
 int main() {
-	int choice;
-	sting key;
+	int choice,flag;
+	string key;
 	student s;
 	while(1)
 	{
@@ -145,8 +153,8 @@ int main() {
 			   break;
 
 		case 2:cout<<"\nEnter key to be searched for: ";
-				cin>>key.
-				int flag=s.search(key);
+				cin>>key;
+				flag=s.search(key);
 				break;
 
 		/*case 3:s.modify();
